@@ -2,23 +2,18 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Forzamos los datos reales directamente para evitar que Render los pise con variables antiguas
-    $host = 'aws-0-sa-east-1.pooler.supabase.com';
+    // Usamos el host directo de tu proyecto para resolver el problema de SNI en la red
+    $host = 'aws-0-sa-east-1.pooler.supabase.com'; 
     $port = '6543';
     $name = 'postgres';
-    $user = 'postgres';
+    $user = 'postgres.qrfaqadirfmzvxbaijqp'; // ID de tu proyecto inyectado en el usuario de forma directa
     $pass = '**Ucv123456**/'; 
 
-    // Tu ID de proyecto real obtenido de Supabase
-    $proyecto_id = "qrfaqadirfmzvxbaijqp"; 
-    
-    // Formato estricto que exige Supabase Cloud para identificar tu cuenta: usuario.id_proyecto
-    $user_dsn = "{$user}.{$proyecto_id}";
-
-    // Construcción limpia y directa del DSN
-    $dsn = "pgsql:host=$host;port=$port;dbname=$name;user=$user_dsn;sslmode=require";
+    // DSN limpio estándar para PostgreSQL
+    $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
+        // Pasamos el usuario formateado directamente en los parámetros del constructor de PDO
         $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
