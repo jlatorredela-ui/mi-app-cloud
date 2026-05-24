@@ -2,14 +2,16 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Conexión directa usando el ID de tu proyecto y su región real (us-east-2)
-    $host = 'db.qrfaqadirfmzvxbaijqp.supabase.co'; 
-    $port = '5432'; // Puerto directo estándar de PostgreSQL
+    // CORRECCIÓN: Usamos el host optimizado para IPv4 (aws-0-) que exige Render en conexiones directas
+    $host = 'aws-0-sa-east-1.pooler.supabase.com'; 
+    $port = '5432'; // Mantenemos el puerto directo estándar
     $name = 'postgres';
-    $user = 'postgres'; 
+    
+    // Al usar el puerto 5432 directo con el pooler de AWS, el usuario DEBE llevar tu ID de proyecto adjunto
+    $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
     $pass = '**Ucv123456**/'; 
 
-    // DSN limpio y directo para entornos de producción Cloud
+    // DSN limpio y forzado por IPv4
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
