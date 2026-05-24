@@ -2,23 +2,24 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // CAMBIO CLAVE: Usamos la dirección directa (db.ID.supabase.co) 
-    // en lugar del pooler (aws...pooler.supabase.com)
-    $host = 'db.qrfaqadirfmzvxbaijqp.supabase.co'; 
-    $port = '5432'; 
+    $host = 'aws-1-us-east-2.pooler.supabase.com';
+    $port = '5432';
     $db   = 'postgres';
-    $user = 'postgres'; 
-    $pass = 'TU_CONTRASEÑA_REAL'; // ASEGÚRATE DE PONERLA BIEN AQUÍ
+    $user = 'postgres.qrfaqadirfmzvxbaijqp';
+    $pass = 'TU_CONTRASEÑA_AQUÍ'; // <--- ESCRIBE TU CONTRASEÑA REAL AQUÍ
 
+    // Construcción del DSN (Data Source Name)
     $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
 
     try {
         $pdo = new PDO($dsn, $user, $pass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            // IMPORTANTE: Esto ayuda a evitar errores de persistencia
+            PDO::ATTR_PERSISTENT         => false
         ]);
         return $pdo;
     } catch (PDOException $e) {
-        die("Error de conexión: " . $e->getMessage());
+        die("Error crítico de conexión: " . $e->getMessage());
     }
 }
