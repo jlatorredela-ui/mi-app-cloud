@@ -6,7 +6,7 @@ function getDBConnection(): PDO {
     $port = '5432';
     $db   = 'postgres';
     $user = 'postgres.qrfaqadirfmzvxbaijqp';
-    $pass = 'TU_CONTRASEÑA_AQUÍ'; // <--- ESCRIBE TU CONTRASEÑA REAL AQUÍ
+    $pass = 'UCV2026jorg'; // <--- ESCRIBE TU CONTRASEÑA REAL AQUÍ
 
     // Construcción del DSN (Data Source Name)
     $dsn = "pgsql:host=$host;port=$port;dbname=$db;sslmode=require";
