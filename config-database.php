@@ -2,15 +2,16 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // SOLUCIÓN ABSOLUTA: Usamos la IP estática IPv4 directa de Supabase en la región us-east-2 (Ohio)
-    // Esto evita por completo el bloqueo de "Network is unreachable" de Render
-    $host = '3.14.240.237'; 
-    $port = '5432'; // Puerto estándar directo de PostgreSQL
+    // Usamos el host oficial del pooler en la región correcta (Ohio: us-east-2)
+    $host = 'aws-0-us-east-2.pooler.supabase.com'; 
+    $port = '6543'; 
     $name = 'postgres';
-    $user = 'postgres.qrfaqadirfmzvxbaijqp'; // ID de tu proyecto integrado obligatoriamente para enrutar la IP
+    
+    // El usuario estricto combinando la autenticación del Pooler con tu ID de proyecto
+    $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
     $pass = '**Ucv123456**/'; 
 
-    // DSN limpio estructurado sobre IPv4 directa
+    // Agregamos opciones específicas de PostgreSQL para forzar un manejo de conexión limpia
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
