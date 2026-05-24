@@ -2,21 +2,24 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // URL-encodamos tu contraseña para que los caracteres especiales (** y /) no rompan el Pooler
-    $user = "postgres.qrfaqadirfmzvxbaijqp"; 
-    $pass = urlencode('**Ucv123456**/'); 
-    $host = "aws-0-us-east-2.pooler.supabase.com";
-    $port = "6543";
-    $name = "postgres";
+    // 1. Usamos el host del pooler regional de Ohio que ya validamos que responde
+    $host = 'aws-0-us-east-2.pooler.supabase.com'; 
+    $port = '6543'; 
+    $name = 'postgres';
+    
+    // 2. Pasamos el usuario con el ID del proyecto directamente aquí
+    $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
+    $pass = '**Ucv123456**/'; 
 
-    // Construimos la cadena de conexión usando el formato de URL de PostgreSQL (el más robusto para Cloud)
+    // 3. El DSN se mantiene limpio, sin configuraciones extrañas de texto
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
-        // Al usar la autenticación con el usuario del pooler y la clave codificada, conectará directo
-        $pdo = new PDO($dsn, $user, '**Ucv123456**/', [
+        // 4. Pasamos las variables de forma nativa al constructor de PDO
+        $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_PERSISTENT         => false // Evita que se queden conexiones muertas en Render
         ]);
         return $pdo;
     } catch (PDOException $e) {
