@@ -2,18 +2,17 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Usamos el host directo de tu proyecto para resolver el problema de SNI en la red
-    $host = 'aws-0-sa-east-1.pooler.supabase.com'; 
-    $port = '6543';
+    // SOLUCIÓN INTEGRAL: Usamos la conexión directa a tu base de datos con tu Project ID
+    $host = 'db.qrfaqadirfmzvxbaijqp.supabase.co'; 
+    $port = '5432'; // Puerto directo estándar de PostgreSQL
     $name = 'postgres';
-    $user = 'postgres.qrfaqadirfmzvxbaijqp'; // ID de tu proyecto inyectado en el usuario de forma directa
+    $user = 'postgres'; // Usuario limpio
     $pass = '**Ucv123456**/'; 
 
-    // DSN limpio estándar para PostgreSQL
+    // DSN directo para producción Cloud
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
-        // Pasamos el usuario formateado directamente en los parámetros del constructor de PDO
         $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
