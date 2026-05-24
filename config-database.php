@@ -2,16 +2,16 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // CORRECCIÓN: Usamos el host optimizado para IPv4 (aws-0-) que exige Render en conexiones directas
-    $host = 'aws-0-sa-east-1.pooler.supabase.com'; 
-    $port = '5432'; // Mantenemos el puerto directo estándar
+    // SOLUCIÓN: Usamos el pooler exacto de tu región Ohio (us-east-2) para resolver por IPv4
+    $host = 'aws-0-us-east-2.pooler.supabase.com'; 
+    $port = '6543'; // Volvemos al puerto del pooler de Supabase
     $name = 'postgres';
     
-    // Al usar el puerto 5432 directo con el pooler de AWS, el usuario DEBE llevar tu ID de proyecto adjunto
+    // El usuario formateado estrictamente con tu ID de proyecto de Ohio
     $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
     $pass = '**Ucv123456**/'; 
 
-    // DSN limpio y forzado por IPv4
+    // DSN configurado para resolver con éxito desde Render
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
