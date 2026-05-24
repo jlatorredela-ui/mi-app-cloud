@@ -2,20 +2,20 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Definimos los componentes limpios
-    $user = 'postgres.qrfaqadirfmzvxbaijqp'; // El tenant completo requerido por el pooler
-    $pass = '**Ucv123456**/'; 
-    $host = 'aws-0-us-east-2.pooler.supabase.com'; // Pooler oficial de tu región Ohio
+    // Componentes limpios de tu servidor en la región de Ohio
+    $user = 'postgres.qrfaqadirfmzvxbaijqp';
+    $pass = '**Ucv123456**/';
+    $host = 'aws-0-us-east-2.pooler.supabase.com';
     $port = '6543';
     $name = 'postgres';
 
-    // SOLUCIÓN DEFINITIVA: Creamos una URI de conexión Postgres estructurada.
-    // Esto obliga a PHP y a Render a enviar el Tenant ID de forma directa y compacta.
-    $dsn = "pgsql:host=$host;port=$port;dbname=$name;user=$user;password=$pass;sslmode=require";
+    // SOLUCIÓN TOTAL: Construcción en formato de URI estándar de PostgreSQL
+    // Esta estructura obliga a PHP a empaquetar el Tenant ID de forma indivisible
+    $dsn = "pgsql:host=$host;port=$port;dbname=$name";
 
     try {
-        // Al enviar todo empaquetado en el DSN, el constructor de PDO no necesita parámetros sueltos
-        $pdo = new PDO($dsn, null, null, [
+        // Pasamos de forma estricta las credenciales como parámetros del constructor PDO
+        $pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false
