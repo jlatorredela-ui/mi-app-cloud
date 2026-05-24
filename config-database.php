@@ -2,22 +2,20 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Captura las variables de entorno de Render
-    $host = getenv('DB_HOST') ?: 'aws-0-sa-east-1.pooler.supabase.com';
-    $port = getenv('DB_PORT') ?: '6543';
-    $name = getenv('DB_NAME') ?: 'postgres';
-    $user = getenv('DB_USER') ?: 'postgres';
-    $pass = getenv('DB_PASS') ?: '**Ucv123456**/'; 
+    // Forzamos los datos reales directamente para evitar que Render los pise con variables antiguas
+    $host = 'aws-0-sa-east-1.pooler.supabase.com';
+    $port = '6543';
+    $name = 'postgres';
+    $user = 'postgres';
+    $pass = '**Ucv123456**/'; 
 
-    // SOLUCIÓN DEFINITIVA: Formateamos el usuario con tu ID real de Supabase (qrfaqadirfmzvxbaijqp)
-    if ($host === 'aws-0-sa-east-1.pooler.supabase.com') {
-        $proyecto_id = "qrfaqadirfmzvxbaijqp"; // Tu ID real de Supabase
-        $user_dsn = "{$user}.{$proyecto_id}";
-    } else {
-        $user_dsn = $user;
-    }
+    // Tu ID de proyecto real obtenido de Supabase
+    $proyecto_id = "qrfaqadirfmzvxbaijqp"; 
+    
+    // Formato estricto que exige Supabase Cloud para identificar tu cuenta: usuario.id_proyecto
+    $user_dsn = "{$user}.{$proyecto_id}";
 
-    // Construcción del DSN corregido para el pooler cloud
+    // Construcción limpia y directa del DSN
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;user=$user_dsn;sslmode=require";
 
     try {
