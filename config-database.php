@@ -2,14 +2,14 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // SOLUCIÓN INTEGRAL: Usamos la conexión directa a tu base de datos con tu Project ID
+    // Conexión directa usando el ID de tu proyecto y su región real (us-east-2)
     $host = 'db.qrfaqadirfmzvxbaijqp.supabase.co'; 
     $port = '5432'; // Puerto directo estándar de PostgreSQL
     $name = 'postgres';
-    $user = 'postgres'; // Usuario limpio
+    $user = 'postgres'; 
     $pass = '**Ucv123456**/'; 
 
-    // DSN directo para producción Cloud
+    // DSN limpio y directo para entornos de producción Cloud
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
