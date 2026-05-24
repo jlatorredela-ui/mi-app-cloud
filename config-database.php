@@ -1,23 +1,29 @@
 <?php
-// config/database.php
+// config-database.php
 
 function getDBConnection(): PDO {
-    // Captura las variables de entorno de Render; si no existen, usa tus datos de Supabase por defecto
+    // Captura las variables de entorno de Render
     $host = getenv('DB_HOST') ?: 'aws-0-sa-east-1.pooler.supabase.com';
     $port = getenv('DB_PORT') ?: '6543';
     $name = getenv('DB_NAME') ?: 'postgres';
-    $user = getenv('DB_USER') ?: '**Ucv123456**/';
-    
-    // CAMBIA ESTO: Pon aquí la contraseña que definiste al crear el proyecto en Supabase
+    $user = getenv('DB_USER') ?: 'postgres';
     $pass = getenv('DB_PASS') ?: '**Ucv123456**/'; 
 
-    // Conexión obligatoria usando sslmode=require para entornos Cloud de Supabase
-    $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
+    // SOLUCIÓN DEFINITIVA: Formateamos el usuario con tu ID real de Supabase (qrfaqadirfmzvxbaijqp)
+    if ($host === 'aws-0-sa-east-1.pooler.supabase.com') {
+        $proyecto_id = "qrfaqadirfmzvxbaijqp"; // Tu ID real de Supabase
+        $user_dsn = "{$user}.{$proyecto_id}";
+    } else {
+        $user_dsn = $user;
+    }
+
+    // Construcción del DSN corregido para el pooler cloud
+    $dsn = "pgsql:host=$host;port=$port;dbname=$name;user=$user_dsn;sslmode=require";
 
     try {
         $pdo = new PDO($dsn, $user, $pass, [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Reportar errores como excepciones
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Retornar arreglos asociativos
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ]);
         return $pdo;
     } catch (PDOException $e) {
