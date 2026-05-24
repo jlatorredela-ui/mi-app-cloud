@@ -2,16 +2,15 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // Usamos el host oficial del pooler en la región correcta (Ohio: us-east-2)
-    $host = 'aws-0-us-east-2.pooler.supabase.com'; 
-    $port = '6543'; 
+    // Forzamos la cadena de conexión URI oficial de Supabase para el Pooler de Ohio (Puerto 6543)
+    // El formato pasa el ID del proyecto directamente antes del host, asegurando que se encuentre el tenant.
+    $user = 'postgres';
+    $pass = '**Ucv123456**/';
+    $host = 'postgres.qrfaqadirfmzvxbaijqp@aws-0-us-east-2.pooler.supabase.com';
+    $port = '6543';
     $name = 'postgres';
-    
-    // El usuario estricto combinando la autenticación del Pooler con tu ID de proyecto
-    $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
-    $pass = '**Ucv123456**/'; 
 
-    // Agregamos opciones específicas de PostgreSQL para forzar un manejo de conexión limpia
+    // Construcción del DSN usando la estructura de host con Tenant integrado
     $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
 
     try {
