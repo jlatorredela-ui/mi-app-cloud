@@ -2,24 +2,23 @@
 // config-database.php
 
 function getDBConnection(): PDO {
-    // 1. Usamos el host del pooler regional de Ohio que ya validamos que responde
-    $host = 'aws-0-us-east-2.pooler.supabase.com'; 
-    $port = '6543'; 
-    $name = 'postgres';
-    
-    // 2. Pasamos el usuario con el ID del proyecto directamente aquí
-    $user = 'postgres.qrfaqadirfmzvxbaijqp'; 
+    // Definimos los componentes limpios
+    $user = 'postgres.qrfaqadirfmzvxbaijqp'; // El tenant completo requerido por el pooler
     $pass = '**Ucv123456**/'; 
+    $host = 'aws-0-us-east-2.pooler.supabase.com'; // Pooler oficial de tu región Ohio
+    $port = '6543';
+    $name = 'postgres';
 
-    // 3. El DSN se mantiene limpio, sin configuraciones extrañas de texto
-    $dsn = "pgsql:host=$host;port=$port;dbname=$name;sslmode=require";
+    // SOLUCIÓN DEFINITIVA: Creamos una URI de conexión Postgres estructurada.
+    // Esto obliga a PHP y a Render a enviar el Tenant ID de forma directa y compacta.
+    $dsn = "pgsql:host=$host;port=$port;dbname=$name;user=$user;password=$pass;sslmode=require";
 
     try {
-        // 4. Pasamos las variables de forma nativa al constructor de PDO
-        $pdo = new PDO($dsn, $user, $pass, [
+        // Al enviar todo empaquetado en el DSN, el constructor de PDO no necesita parámetros sueltos
+        $pdo = new PDO($dsn, null, null, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_PERSISTENT         => false // Evita que se queden conexiones muertas en Render
+            PDO::ATTR_EMULATE_PREPARES   => false
         ]);
         return $pdo;
     } catch (PDOException $e) {
